@@ -45,7 +45,7 @@ welcome(){
   print_line
   echo "O Script pode ser cancelado com o CTRL+C"
   print_line
-  echo "http://www.github.com/helmuthdu/aui"
+  echo "http://www.github.com/helmuthdu/aui ou http://www.github.com/seguritron/adriano"
   print_line
   echo -e "\nBackups:"
   print_line
@@ -546,7 +546,7 @@ A Advanced Linux Sound Architecture (ALSA) é um componente do kernel Linux dest
   pause_function
   print_title "NTFS/FAT/exFAT/F2FS - https://wiki.archlinux.org/index.php/File_Systems"
   print_info "Um sistema de arquivos (ou sistema de arquivos) é um meio de organizar os dados que devem ser retidos após o término de um programa, fornecendo procedimentos para armazenar, recuperar e atualizar os dados, bem como gerenciar o espaço disponível no (s) dispositivo (s) que os contém. Um sistema de arquivos organiza os dados de maneira eficiente e é ajustado às características específicas do dispositivo."
-  package_install "ntfs-3g dosfstools exfat-utils f2fs-tools fuse fuse-exfat autofs mtpfs"
+  package_install "dosfstools exfat-utils f2fs-tools fuse fuse-exfat autofs mtpfs"
   pause_function
   print_title "SYSTEMD-TIMESYNCD - https://wiki.archlinux.org/index.php/Systemd-timesyncd"
   print_info "Um sistema de arquivos (ou sistema de arquivos) é um meio de organizar os dados que devem ser retidos após o término de um programa, fornecendo procedimentos para armazenar, recuperar e atualizar os dados, bem como gerenciar o espaço disponível no (s) dispositivo (s) que os contém. Um sistema de arquivos organiza os dados de maneira eficiente e é ajustado às características específicas do dispositivo."
@@ -684,9 +684,9 @@ Samba é uma reimplementação do protocolo de rede SMB / CIFS, ele facilita o c
       pdbedit -a -u "${username}"
     done
     # enable services
-    system_ctl enable smb.service
+    systemctl enable smb.service
     system_ctl enable nmb.service
-    pause_function
+    pausefunction
   fi
 }
 #}}}
@@ -696,8 +696,8 @@ enable_readahead(){
   print_info "O Systemd vem com sua própria implementação readahead, o que deve, em princípio, melhorar o tempo de inicialização. No entanto, dependendo da versão do kernel e do tipo de disco rígido, sua milhagem pode variar (ou seja, pode ser mais lenta)."
   read_input_text "Habilitar o Readahead" "$READAHEAD"
   if [[ $OPTION == y ]]; then
-    system_ctl enable systemd-readahead-collect
-    system_ctl enable systemd-readahead-replay
+    systemctl enable systemd-readahead-collect
+    systemctl enable systemd-readahead-replay
     pause_function
   fi
 }
@@ -709,7 +709,7 @@ install_zram (){
   read_input_text "Instale o Zram" "$ZRAM"
   if [[ $OPTION == y ]]; then
     aur_package_install "zramswap"
-    system_ctl enable zramswap
+    systemctl enable zramswap
     pause_function
   fi
 }
@@ -721,10 +721,10 @@ install_tlp(){
   read_input_text "Install TLP" "$TLP"
   if [[ $OPTION == y ]]; then
     package_install "tlp"
-    system_ctl enable tlp.service
-    system_ctl enable tlp-sleep.service
-    system_ctl mask systemd-rfkill.service
-    system_ctl mask systemd-rfkill.socket
+    systemctl enable tlp.service
+    systemctl enable tlp-sleep.service
+    systemctl mask systemd-rfkill.service
+    systemctl mask systemd-rfkill.socket
     tlp start
     pause_function
   fi
