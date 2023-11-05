@@ -356,7 +356,7 @@ format_partitions() {
         ;;
       2)
         total_memory=$(grep MemTotal /proc/meminfo | awk '{print $2/1024}' | sed 's/\..*//')
-        dd if=/dev/zero of="${MOUNTPOINT}"/swapfile bs=1M count="${total_memory}" status=progress
+        dd if=/dev/zero of="${MOUNTPOINT}"/swapfile bs=2M count="${total_memory}" status=progress
         chmod 600 "${MOUNTPOINT}"/swapfile
         mkswap "${MOUNTPOINT}"/swapfile
         swapon "${MOUNTPOINT}"/swapfile
@@ -494,7 +494,7 @@ install_base_system() {
   print_info "Usando o script pacstrap, instalamos o sistema básico. O grupo de pacotes base-devel será instalado também."
   rm "${MOUNTPOINT}""${EFI_MOUNTPOINT}"/vmlinuz-linux
   select_linux_version
-  pacstrap "${MOUNTPOINT}" base-devel parted btrfs-progs f2fs-tools net-tools
+  pacstrap "${MOUNTPOINT}" base-devel parted btrfs-progs f2fs-tools net-tools linux linux-firmware
   [[ $? -ne 0 ]] && error_msg "Instalando o sistema básico para ${MOUNTPOINT} falhou. Verifique as mensagens de erro acima."
   local PTABLE=$(parted -sl | grep "gpt")
   [[ -n $PTABLE ]] && pacstrap "${MOUNTPOINT}" gptfdisk
@@ -661,7 +661,7 @@ install_bootloader() {
   select bootloader in "${bootloaders_list[@]}"; do
     case "$REPLY" in
     1)
-      pacstrap "${MOUNTPOINT}" grub os-prober
+      pacstrap "${MOUNTPOINT}" grub os-prober ntfs-3g
       break
       ;;
     2)
